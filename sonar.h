@@ -1,7 +1,8 @@
 #ifndef SONAR_H
 #define SONAR_H
 
-void sonar_init(void);
-unsigned get_distance(void);
+void sonars_init();
+unsigned get_distance(int trigPin, int echoPin);
+unsigned get_sonar_distance(int sonar);
 
 #endif

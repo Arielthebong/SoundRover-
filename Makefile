@@ -1,7 +1,7 @@
 NAME = main
 OBJECTS = mcp3008.o sonar.o motor.o 
 
-CS107E=../../../..
+CS107E=../cs107e.github.io
 CFLAGS = -I$(CS107E)/libpi/include -g -Wall -Og -std=c99 -ffreestanding
 LDFLAGS = -nostdlib -T memmap -L$(CS107E)/libpi/lib
 LDLIBS = -lpi -lgcc
