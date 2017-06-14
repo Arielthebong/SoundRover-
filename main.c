@@ -11,34 +11,20 @@ const int LEFT_SONAR = 1;
 const int RIGHT_SONAR = 2;
 
 void main() {
-<<<<<<< HEAD
-   mcp3008_init();
-     gpio_init();
-  //sonar_init();
-   int total1 = 0;
-volatile   int count1= 0;
-     //       int difference = 0;
-        while (count1 < 500) {
-	  count1++;
-	  //  int result0 = mcp3008_read(0);
-	  int result1 = mcp3008_read(1);
+  //   mcp3008_init();
+    gpio_init();
+    sonars_init();
+   	  //  int result0 = mcp3008_read(0);
+     //  int result1 = mcp3008_read(1);
 	//int result2 = mcp3008_read(2);
-	  total1 += result1;
-=======
-//    mcp3008_init();
-   sonars_init();
- //  sonar_init(rightSonar, 20, 21);
-   //sonar_init(leftSonar, 24, 25);
-
+	//  total1 += result1;
 //   int high0 = 0;
  //  int high1 = 0;
 //    int difference = 0;
-    while (1) {
 //	int result0 = mcp3008_read(0)- 560;
   //      int result1 = mcp3008_read(1)- 500;
 //	int result2 = mcp3008_read(2);
-	/*if(result0 > 570)
->>>>>>> 0fa9d42796d375f5983b9202793151a635986839
+	/*if(result0 > 570);
 		
 	  //	if(result0>result1){
 	  //    difference = result0 - result1;
@@ -46,7 +32,7 @@ volatile   int count1= 0;
 	  //   difference = result1 - result0;
 	  //}
 //	int result2 = mcp3008_read(2);
-/*	if(result0 < 0) 
+	if(result0 < 0) 
 		result0 = 0;
 	 if (result1 < 0)
 		result1 = 0;
@@ -57,40 +43,50 @@ volatile   int count1= 0;
 //		high1 = result1;
 //	printf("dif = %d\n", difference);
 //	printf("high1 = %d\n", high1);
-<<<<<<< HEAD
-   printf("result1 = %d \n", result1);
+      //  printf("result1 = %d \n", result1);
 	//printf("result2 = %d\n", result2);
 
 	//	printf("%d\n", get_distance());
-   /* motor_init(GPIO_PIN20);
-   motor_init(GPIO_PIN21);
-   motor_init(GPIO_PIN24);
-   motor_init(GPIO_PIN25);
-   while(1){   
-run_motor(GPIO_PIN24);
-   run_motor(GPIO_PIN25);
-   run_motor(GPIO_PIN20);
-   run_motor(GPIO_PIN21);
-  volatile int count = 10000;
-   while(count != 0) count--;
-   stop_motor(GPIO_PIN21);
-   */
+    rovor_motors_init(GPIO_PIN24, GPIO_PIN25);
+      unsigned distance = 1996;
+  //printf("start = %d",distance);
+  volatile int i = 0;
 
-   //unsigned distance = get_distance();
+
+  while(distance > 5 ){
+    rovor_stop();
+    distance = 0;
+    i = 0;
+    while(i<10){
+   unsigned temp_distance = get_sonar_distance(FRONT_SONAR);
+   distance+= temp_distance;
+   i++;
+   //run_motor(GPIO_PIN25);
+   //run_motor(GPIO_PIN24);
+    }
+    distance /= 10;
+    rovor_turn_left(i);
+    printf("Left");
+    delay_ms(5000);
+    rovor_stop();
+    delay_ms(500);
+    rovor_turn_right(i);
+    printf("right");
+    delay_ms(5000);
+    //run_motor(GPIO_PIN25);
+    //run_motor(GPIO_PIN24); 
    // printf('Nothing');
-     //printf("distance = %d \n", distance);
-=======
+    //printf("distance = %d \n", distance);
 //	printf("result0 = %d ", result0);
 //	printf("result1 = %d\n ", result1);
 //	printf("result2 = %d\n", result2);
-	printf("front sonar: %d\n", get_sonar_distance(FRONT_SONAR));
-        delay_us(1000);
-        printf("left sonar: %d\n", get_sonar_distance(LEFT_SONAR));
-    	printf("right sonar: %d\n", get_sonar_distance(RIGHT_SONAR));
->>>>>>> 0fa9d42796d375f5983b9202793151a635986839
-
-    }
-	int av1 = total1/50;
-	printf("Average = %d", av1);
+//   printf("front sonar: %d\n", get_sonar_distance(FRONT_SONAR));
+         
+// printf("left sonar: %d\n", get_sonar_distance(LEFT_SONAR));
+      //	printf("right sonar: %d\n", get_sonar_distance(RIGHT_SONAR));
+  }
+         
+   stop_motor(GPIO_PIN25);
+   stop_motor(GPIO_PIN24);
 
 }
