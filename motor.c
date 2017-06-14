@@ -34,14 +34,20 @@ void stop_motor(int pin) {
 //Turns to the left a specified number of degrees 
 void rovor_turn_left(int degrees) {
 
-
-
+   gpio_write(rightMotorPin, 0);
+   gpio_write(leftMotorPin, 1);
+   //delay(  );
+   gpio_write(leftMotorPin, 0);
+		
 }
 
 //Turns the amount a specified number of degrees 
 void rovor_turn_right(int degrees) {
 
-
+   gpio_write(leftMotorPin, 0);
+   gpio_write(rightMotorPin, 1);
+  // delay( );
+   gpio_write(rightMotorPin, 0);
 
 
 }

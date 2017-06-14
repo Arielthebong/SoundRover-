@@ -1,9 +1,11 @@
 #include "spi.h"
 #include "mcp3008.h"
+#include "printf.h"
 
 void mcp3008_init() {
     spi_init(SPI_CE0, 1024); /* 250KHz */
 }
+
 
 unsigned mcp3008_read( unsigned channel ) {
     unsigned char tx[3];
@@ -17,5 +19,48 @@ unsigned mcp3008_read( unsigned channel ) {
 
     spi_transfer(tx, rx, 3);
     return ((rx[1] & 0x3) << 8) + rx[2];
+}
+
+//Returns average value of a mic with 500 iterations 
+unsigned average_mic(unsigned channel) {
+   int sum = 0;
+   int cycles = 250;
+   for(int i = 0; i < cycles; i++) {
+	sum += mcp3008_read(channel);
+   }
+
+   return sum/cycles;
+}
+
+/*Returns 1 if channel one is louder, Returns 2 if channel two is louder, Returns 0 if neither. One is louder than other if greater than one*/
+unsigned compare_mics(unsigned channel_one, unsigned channel_two, int avg_one, int avg_two) {
+   int cycles = 250;
+   int diff_one = 0;
+   int diff_two = 0;
+   for(int i = 0; i < cycles; i++) {
+	int read_one = mcp3008_read(channel_one);
+	int read_two = mcp3008_read(channel_two);
+
+	read_one -= avg_one;
+	read_two -= avg_two;
+	if(read_one < 0) //Take absolute value 
+		read_one = -read_one;
+	if(read_two < 0) 
+		read_two = -read_two;
+
+	diff_one += read_one;
+	diff_two += read_two;
+   }
+   
+   diff_one /= cycles;
+   diff_two /= cycles;
+   printf("diff_one = %d", diff_one);
+   printf("diff_two = %d", diff_two);   
+   if(diff_one - diff_two >= 16)
+	return 1;
+   else if(diff_two - diff_one >= 16)
+	return 2;
+   else 
+	return 0;
 }
 
