@@ -24,7 +24,7 @@ unsigned mcp3008_read( unsigned channel ) {
 //Returns average value of a mic with 500 iterations 
 unsigned average_mic(unsigned channel) {
    int sum = 0;
-   int cycles = 250;
+   int cycles = 300;
    for(int i = 0; i < cycles; i++) {
 	sum += mcp3008_read(channel);
    }
@@ -32,9 +32,9 @@ unsigned average_mic(unsigned channel) {
    return sum/cycles;
 }
 
-/*Returns 1 if channel one is louder, Returns 2 if channel two is louder, Returns 0 if neither. One is louder than other if greater than one*/
+/*Returns 0 if channel one is louder, Returns 1 if channel two is louder, Returns 999 if neither. One is louder than other if greater than one*/
 unsigned compare_mics(unsigned channel_one, unsigned channel_two, int avg_one, int avg_two) {
-   int cycles = 250;
+   int cycles = 300;
    int diff_one = 0;
    int diff_two = 0;
    for(int i = 0; i < cycles; i++) {
@@ -54,13 +54,13 @@ unsigned compare_mics(unsigned channel_one, unsigned channel_two, int avg_one, i
    
    diff_one /= cycles;
    diff_two /= cycles;
-   printf("diff_one = %d", diff_one);
-   printf("diff_two = %d", diff_two);   
-   if(diff_one - diff_two >= 16)
-	return 1;
-   else if(diff_two - diff_one >= 16)
-	return 2;
-   else 
+   printf("diff_one = %d ", diff_one);
+   printf("diff_two = %d\n", diff_two);   
+   if(diff_one - diff_two >= 20)
 	return 0;
+   else if(diff_two - diff_one >= 20)
+	return 1;
+   else 
+	return 999;
 }
 
